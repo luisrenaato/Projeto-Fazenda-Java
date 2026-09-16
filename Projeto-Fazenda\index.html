@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Projeto Fazenda — Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Plugin de labels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-title">PROJETO FAZENDA</div>
+            <div class="brand-subtitle">
+                Dashboard estatístico do rebanho
+            </div>
+        </div>
+
+        <div id="connectionStatus" class="connection loading">
+            ● Conectando...
+        </div>
+
+        <div class="side-title">
+            NAVEGAÇÃO
+        </div>
+
+        <button class="nav-button active" data-page="overview">
+            Visão geral
+        </button>
+
+        <button class="nav-button" data-page="rebanho">
+            Rebanho
+        </button>
+
+        <button class="nav-button" data-page="alimentacao">
+            Alimentação
+        </button>
+
+        <button class="nav-button" data-page="saude">
+            Saúde & manejo
+        </button>
+
+        <button class="nav-button" data-page="ambiente">
+            Ambiente
+        </button>
+
+        <button class="nav-button" data-page="estatistica">
+            Estatística
+        </button>
+
+        <div class="side-title filtros-title">
+            FILTROS
+        </div>
+
+        <label for="filterColumn">
+            Filtrar por
+        </label>
+
+        <select id="filterColumn">
+            <option value="">Todos os dados</option>
+        </select>
+
+        <label for="filterValue">
+            Valor
+        </label>
+
+        <select id="filterValue">
+            <option value="">Todos</option>
+        </select>
+
+        <button id="clearFilters" class="clear-button">
+            Limpar filtros
+        </button>
+
+        <div class="update-box">
+            <span>Última atualização</span>
+            <strong id="lastUpdate">—</strong>
+        </div>
+
+    </aside>
+
+
+    <main>
+
+        <header class="top">
+
+            <div class="hero-text">
+
+                <div class="eyebrow">
+                    PROJETO FAZENDA
+                </div>
+
+                <h1>
+                    Inteligência do Rebanho
+                </h1>
+
+                <p>
+                    Dados coletados pelo Google Forms,
+                    análise estatística e visualização
+                    do rebanho.
+                </p>
+
+            </div>
+
+            <div class="cow">
+                🐄
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             VISÃO GERAL
+        ================================================== -->
+
+        <section id="overview" class="page active">
+
+            <div class="section-title">
+
+                <h2>Panorama</h2>
+
+                <p>
+                    Visão geral das respostas atualmente carregadas.
+                </p>
+
+            </div>
+
+
+            <div class="metrics">
+
+                <div class="metric">
+                    <span>RESPOSTAS</span>
+                    <strong id="metricTotal">0</strong>
+                    <small>registros</small>
+                </div>
+
+                <div class="metric">
+                    <span>COLUNAS</span>
+                    <strong id="metricColumns">0</strong>
+                    <small>variáveis</small>
+                </div>
+
+                <div class="metric">
+                    <span>RAÇA / CATEGORIA</span>
+                    <strong id="metricRace">—</strong>
+                    <small>mais frequente</small>
+                </div>
+
+                <div class="metric">
+                    <span>FINALIDADE</span>
+                    <strong id="metricPurpose">—</strong>
+                    <small>mais frequente</small>
+                </div>
+
+            </div>
+
+
+            <div class="chart-grid">
+
+                <div class="paper-card large-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Distribuição das categorias</h3>
+                            <p>
+                                Colunas verticais para comparação.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="mainCategoryChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="paper-card">
+
+                    <div class="card-heading">
+                        <div>
+                            <h3>Resumo das respostas</h3>
+                            <p>
+                                Principais categorias encontradas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="summaryList" class="summary-list"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REBANHO
+        ================================================== -->
+
+        <section id="rebanho" class="page">
+
+            <div class="section-title">
+
+                <h2>Rebanho</h2>
+
+                <p>
+                    Distribuição das principais variáveis do rebanho.
+                </p>
+
+            </div>
+
+            <div id="rebanhoCharts" class="chart-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             ALIMENTAÇÃO
+        ================================================== -->
+
+        <section id="alimentacao" class="page">
+
+            <div class="section-title">
+
+                <h2>Alimentação</h2>
+
+                <p>
+                    Alimentação, água, suplementação e custos.
+                </p>
+
+            </div>
+
+            <div id="alimentacaoCharts" class="chart-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             SAÚDE
+        ================================================== -->
+
+        <section id="saude" class="page">
+
+            <div class="section-title">
+
+                <h2>Saúde & manejo</h2>
+
+                <p>
+                    Saúde, vacinação, acompanhamento e manejo.
+                </p>
+
+            </div>
+
+            <div id="saudeCharts" class="chart-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             AMBIENTE
+        ================================================== -->
+
+        <section id="ambiente" class="page">
+
+            <div class="section-title">
+
+                <h2>Ambiente & bem-estar</h2>
+
+                <p>
+                    Ambiente, temperatura, água, pastagem e sombra.
+                </p>
+
+            </div>
+
+            <div id="ambienteCharts" class="chart-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             ESTATÍSTICA
+        ================================================== -->
+
+        <section id="estatistica" class="page">
+
+            <div class="section-title">
+
+                <h2>Laboratório estatístico</h2>
+
+                <p>
+                    Medidas estatísticas calculadas diretamente
+                    sobre os dados da planilha.
+                </p>
+
+            </div>
+
+
+            <div class="paper-card">
+
+                <label class="field-label">
+                    Escolha uma variável numérica
+                </label>
+
+                <select id="statVariable" class="big-select">
+                    <option value="">
+                        Detectando variáveis...
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div id="statistics" class="statistics"></div>
+
+
+            <div class="chart-grid">
+
+                <div class="paper-card">
+
+                    <div class="card-heading">
+
+                        <div>
+                            <h3>Histograma</h3>
+                            <p>
+                                Distribuição dos valores.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="histogramChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="paper-card">
+
+                    <div class="card-heading">
+
+                        <div>
+                            <h3>Boxplot</h3>
+                            <p>
+                                Mínimo, Q1, mediana, Q3,
+                                máximo e outliers.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div id="boxplot" class="boxplot-wrapper"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="paper-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <h3>Tabela de frequência</h3>
+                    </div>
+
+                </div>
+
+                <div id="frequencyTable"></div>
+
+            </div>
+
+
+            <div class="paper-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <h3>Estatística descritiva</h3>
+                    </div>
+
+                </div>
+
+                <div id="descriptiveTable"></div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            Projeto Fazenda · Dados atualizados automaticamente
+        </footer>
+
+    </main>
+
+
+    <div id="loadingScreen" class="loading-screen">
+
+        <div class="loader"></div>
+
+        <h2>Carregando dados...</h2>
+
+        <p>
+            Buscando respostas do Google Sheets.
+        </p>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
